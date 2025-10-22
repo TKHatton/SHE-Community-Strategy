@@ -1,741 +1,1060 @@
-import React, { useState, useEffect } from 'react';
-import { Menu, X, ChevronRight, ExternalLink, Check, ArrowRight, Sparkles, Users, BookOpen, Heart, Calendar, Globe, Zap } from 'lucide-react';
-
-const SHECommunityWebsite = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('home');
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = ['home', 'about', 'rhythm', 'join', 'ethics'];
-      const current = sections.find(section => {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          return rect.top <= 100 && rect.bottom >= 100;
-        }
-        return false;
-      });
-      if (current) setActiveSection(current);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SHE.Community - Where Women Lead the Future of AI</title>
+  <style>
+    :root {
+      --color-crimson: #DD292F;
+      --color-coral: #FF5050;
+      --color-soft-coral: #FF8585;
+      --color-black: #000000;
+      --color-white: #FFFFFF;
+      --color-beige: #EDDBD5;
+      --color-grey-300: #D9D9D9;
+      --color-mint: #45FFCA;
+      --color-deep-blue: #114E8E;
     }
-    setIsMenuOpen(false);
-  };
 
-  const weeklyThemes = [
-    { day: 'MON', theme: 'Momentum Monday', emoji: '🌟', purpose: 'Set your focus', color: '#FF5050' },
-    { day: 'TUE', theme: "Ambassadors' Office", emoji: '💬', purpose: 'Get support', color: '#114E8E' },
-    { day: 'WED', theme: 'Networking', emoji: '🤝', purpose: 'Connect & collaborate', color: '#45FFCA' },
-    { day: 'THU', theme: 'Issues Room', emoji: '🧩', purpose: 'Solve together', color: '#FF8585' },
-    { day: 'FRI', theme: 'Flow Friday', emoji: '🌊', purpose: 'Celebrate wins', color: '#DD292F' }
-  ];
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  const stats = [
-    { number: '1M', label: 'Women Xperts', sublabel: 'Our Mission' },
-    { number: '5', label: 'Days/Week', sublabel: 'Active Community' },
-    { number: '$19', label: 'Per Month', sublabel: 'Cancel Anytime' },
-    { number: '∞', label: 'Impact', sublabel: 'Generations' }
-  ];
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      background-color: #000;
+      color: #fff;
+      overflow-x: hidden;
+    }
 
-  const values = ['Ethics', 'Equity', 'Inclusion', 'Empowerment', 'Creative Innovation', 'Sustainability', 'Transparency', 'Accountability'];
+    .gradient-text {
+      background: linear-gradient(135deg, #FF5050, #DD292F);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
 
-  return (
-    <div className="min-h-screen bg-black text-white overflow-x-hidden" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif' }}>
-      <style>{`
-        :root {
-          --color-crimson: #DD292F;
-          --color-coral: #FF5050;
-          --color-soft-coral: #FF8585;
-          --color-black: #000000;
-          --color-white: #FFFFFF;
-          --color-beige: #EDDBD5;
-          --color-grey-300: #D9D9D9;
-          --color-mint: #45FFCA;
-          --color-deep-blue: #114E8E;
-        }
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
 
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-        }
+    .nav-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-        .gradient-text {
-          background: linear-gradient(135deg, #FF5050, #DD292F);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-        }
+    .logo {
+      height: 64px;
+      width: auto;
+    }
 
-        .gradient-coral {
-          background: linear-gradient(135deg, #FF5050 0%, #DD292F 100%);
-        }
+    .nav-links {
+      display: flex;
+      gap: 48px;
+      align-items: center;
+    }
 
-        .gradient-blue {
-          background: linear-gradient(135deg, #114E8E 0%, #45FFCA 100%);
-        }
+    .nav-link {
+      color: white;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 14px;
+      font-weight: 600;
+      position: relative;
+      transition: color 0.3s ease;
+    }
 
-        .hero-title {
-          font-size: clamp(3rem, 8vw, 7rem);
-          font-weight: 900;
-          line-height: 0.95;
-          letter-spacing: -0.03em;
-        }
+    .nav-link:hover {
+      color: #FF5050;
+    }
 
-        .section-title {
-          font-size: clamp(2.5rem, 5vw, 4.5rem);
-          font-weight: 800;
-          line-height: 1.1;
-          letter-spacing: -0.02em;
-        }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #FF5050, #DD292F);
+      transition: width 0.3s ease;
+    }
 
-        .btn-primary {
-          background: linear-gradient(135deg, #FF5050, #DD292F);
-          color: white;
-          padding: 20px 48px;
-          border-radius: 60px;
-          font-weight: 700;
-          font-size: 18px;
-          border: none;
-          cursor: pointer;
-          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-          display: inline-flex;
-          align-items: center;
-          gap: 12px;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          box-shadow: 0 8px 32px rgba(221, 41, 47, 0.4);
-        }
+    .nav-link:hover::after {
+      width: 100%;
+    }
 
-        .btn-primary:hover {
-          transform: translateY(-4px) scale(1.02);
-          box-shadow: 0 16px 48px rgba(221, 41, 47, 0.6);
-        }
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 120px 24px 80px;
+      background: linear-gradient(180deg, #000000 0%, #0a0a0a 100%);
+      position: relative;
+    }
 
-        .btn-outline {
-          background: transparent;
-          color: white;
-          padding: 18px 40px;
-          border-radius: 60px;
-          font-weight: 700;
-          border: 2px solid white;
-          cursor: pointer;
-          transition: all 0.4s ease;
-          display: inline-flex;
-          align-items: center;
-          gap: 10px;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-        }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0.1;
+      background-image: radial-gradient(circle at 2px 2px, rgba(255, 80, 80, 0.3) 1px, transparent 0);
+      background-size: 48px 48px;
+    }
 
-        .btn-outline:hover {
-          background: white;
-          color: black;
-          transform: translateY(-2px);
-        }
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      width: 100%;
+      position: relative;
+      z-index: 10;
+    }
 
-        .glass-card {
-          background: rgba(255, 255, 255, 0.05);
-          backdrop-filter: blur(20px);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 24px;
-          padding: 40px;
-          transition: all 0.4s ease;
-        }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
 
-        .glass-card:hover {
-          background: rgba(255, 255, 255, 0.08);
-          border-color: rgba(255, 80, 80, 0.3);
-          transform: translateY(-8px);
-        }
+    .hero-title {
+      font-size: clamp(3rem, 8vw, 7rem);
+      font-weight: 900;
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      margin-bottom: 32px;
+    }
 
-        .day-card {
-          background: rgba(255, 255, 255, 0.03);
-          border: 2px solid rgba(255, 255, 255, 0.1);
-          border-radius: 20px;
-          padding: 32px 24px;
-          transition: all 0.4s ease;
-          cursor: pointer;
-          position: relative;
-          overflow: hidden;
-        }
+    .badge {
+      display: inline-block;
+      margin-bottom: 24px;
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      font-weight: 700;
+      background: rgba(255, 80, 80, 0.1);
+      border: 1px solid rgba(255, 80, 80, 0.3);
+      color: #FF5050;
+    }
 
-        .day-card::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          height: 4px;
-          background: var(--day-color);
-          transform: scaleX(0);
-          transition: transform 0.4s ease;
-        }
+    .accent-line {
+      height: 4px;
+      width: 80px;
+      background: linear-gradient(90deg, #FF5050, #DD292F);
+      margin: 24px 0;
+      border-radius: 2px;
+    }
 
-        .day-card:hover::before {
-          transform: scaleX(1);
-        }
+    .hero-text {
+      font-size: clamp(1.25rem, 2vw, 1.5rem);
+      margin-bottom: 48px;
+      color: #ccc;
+      line-height: 1.6;
+    }
 
-        .day-card:hover {
-          background: rgba(255, 255, 255, 0.08);
-          border-color: var(--day-color);
-          transform: translateY(-6px) scale(1.02);
-        }
+    .btn-primary {
+      background: linear-gradient(135deg, #FF5050, #DD292F);
+      color: white;
+      padding: 20px 48px;
+      border-radius: 60px;
+      font-weight: 700;
+      font-size: 18px;
+      border: none;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      box-shadow: 0 8px 32px rgba(221, 41, 47, 0.4);
+      transition: all 0.4s ease;
+      display: inline-block;
+      text-decoration: none;
+    }
 
-        .parallax-section {
-          position: relative;
-          min-height: 100vh;
-          display: flex;
-          align-items: center;
-          padding: 80px 24px;
-        }
+    .btn-primary:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 16px 48px rgba(221, 41, 47, 0.6);
+    }
 
-        .accent-line {
-          height: 4px;
-          width: 80px;
-          background: linear-gradient(90deg, #FF5050, #DD292F);
-          margin: 24px 0;
-          border-radius: 2px;
-        }
+    .btn-outline {
+      background: transparent;
+      color: white;
+      padding: 18px 40px;
+      border-radius: 60px;
+      font-weight: 700;
+      border: 2px solid white;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: all 0.4s ease;
+      display: inline-block;
+      text-decoration: none;
+      margin-left: 16px;
+    }
 
-        .stat-box {
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 16px;
-          padding: 32px;
-          text-align: center;
-          transition: all 0.4s ease;
-        }
+    .btn-outline:hover {
+      background: white;
+      color: black;
+      transform: translateY(-2px);
+    }
 
-        .stat-box:hover {
-          background: rgba(255, 80, 80, 0.1);
-          border-color: #FF5050;
-          transform: scale(1.05);
-        }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
 
-        .stat-number {
-          font-size: 4rem;
-          font-weight: 900;
-          background: linear-gradient(135deg, #FF5050, #45FFCA);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-          line-height: 1;
-        }
+    .stat-box {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 32px;
+      text-align: center;
+      transition: all 0.4s ease;
+    }
 
-        .nav-link {
-          position: relative;
-          transition: all 0.3s ease;
-          text-transform: uppercase;
-          letter-spacing: 0.1em;
-          font-size: 14px;
-          font-weight: 600;
-        }
+    .stat-box:hover {
+      background: rgba(255, 80, 80, 0.1);
+      border-color: #FF5050;
+      transform: scale(1.05);
+    }
 
-        .nav-link::after {
-          content: '';
-          position: absolute;
-          bottom: -4px;
-          left: 0;
-          width: 0;
-          height: 2px;
-          background: linear-gradient(90deg, #FF5050, #DD292F);
-          transition: width 0.3s ease;
-        }
+    .stat-number {
+      font-size: 4rem;
+      font-weight: 900;
+      color: #FF5050;
+      line-height: 1;
+    }
 
-        .nav-link:hover::after,
-        .nav-link.active::after {
-          width: 100%;
-        }
+    .stat-label {
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 8px;
+    }
 
-        @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-20px); }
-        }
+    .stat-sublabel {
+      font-size: 14px;
+      color: #999;
+    }
 
-        .floating {
-          animation: float 6s ease-in-out infinite;
-        }
+    /* Mission Section */
+    .section {
+      padding: 128px 24px;
+    }
 
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(40px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
+    .section-dark {
+      background: linear-gradient(180deg, #0a0a0a 0%, #000000 100%);
+    }
 
-        .fade-in-up {
-          animation: fadeInUp 0.8s ease-out forwards;
-        }
+    .section-beige {
+      background-color: #EDDBD5;
+      color: #000;
+    }
 
-        .feature-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-          gap: 32px;
-        }
+    .section-title {
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 48px;
+      text-align: center;
+    }
 
-        @media (max-width: 768px) {
-          .hero-title { font-size: 3rem; }
-          .section-title { font-size: 2rem; }
-          .parallax-section { min-height: auto; padding: 60px 20px; }
-          .stat-number { font-size: 2.5rem; }
-        }
+    .section-text {
+      font-size: clamp(1.25rem, 2vw, 1.5rem);
+      line-height: 1.6;
+      color: #ccc;
+      max-width: 1024px;
+      margin: 0 auto;
+      text-align: center;
+    }
 
-        .value-badge {
-          background: linear-gradient(135deg, rgba(255, 80, 80, 0.2), rgba(221, 41, 47, 0.2));
-          border: 1px solid rgba(255, 80, 80, 0.3);
-          padding: 12px 24px;
-          border-radius: 50px;
-          font-weight: 600;
-          font-size: 14px;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          transition: all 0.3s ease;
-          display: inline-block;
-        }
+    /* Benefits */
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 48px;
+      align-items: start;
+    }
 
-        .value-badge:hover {
-          background: linear-gradient(135deg, #FF5050, #DD292F);
-          transform: scale(1.05);
-        }
-      `}</style>
+    .benefit-card {
+      background: white;
+      border-radius: 24px;
+      padding: 32px;
+      border-left: 4px solid;
+      display: flex;
+      gap: 24px;
+      align-items: start;
+      margin-bottom: 32px;
+    }
 
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-6 py-6">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center">
-              <img src="She_Logo.png" alt="SHE Community Logo" className="h-16 w-auto object-contain" />
-            </div>
-            
-            <div className="hidden md:flex items-center gap-12">
-              {['home', 'about', 'rhythm', 'join', 'ethics'].map(section => (
-                <button
-                  key={section}
-                  onClick={() => scrollToSection(section)}
-                  className={`nav-link ${activeSection === section ? 'active' : ''}`}
-                  style={{ color: activeSection === section ? '#FF5050' : 'white' }}
-                >
-                  {section === 'rhythm' ? 'Rhythm' : section}
-                </button>
-              ))}
-              <a
-                href="https://sheisai.ai"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-mint"
-              >
-                Main Site <ExternalLink size={14} />
-              </a>
-            </div>
+    .benefit-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 28px;
+    }
 
-            <button
-              className="md:hidden p-2"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-            >
-              {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
-            </button>
-          </div>
+    .benefit-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 12px;
+      color: #000;
+    }
 
-          {isMenuOpen && (
-            <div className="md:hidden mt-6 pb-6 flex flex-col gap-4 border-t border-white/10 pt-6">
-              {['home', 'about', 'rhythm', 'join', 'ethics'].map(section => (
-                <button
-                  key={section}
-                  onClick={() => scrollToSection(section)}
-                  className="text-left text-lg uppercase tracking-wider py-2 hover:text-coral transition"
-                >
-                  {section === 'rhythm' ? 'Rhythm' : section}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      </nav>
+    .benefit-text {
+      font-size: 18px;
+      line-height: 1.6;
+      color: #555;
+    }
 
-      {/* HERO SECTION */}
-      <section id="home" className="parallax-section relative" style={{ background: 'linear-gradient(180deg, #000000 0%, #0a0a0a 100%)' }}>
-        <div className="absolute inset-0 opacity-10" style={{
-          backgroundImage: `radial-gradient(circle at 2px 2px, rgba(255, 80, 80, 0.3) 1px, transparent 0)`,
-          backgroundSize: '48px 48px'
-        }}></div>
-        
-        <div className="max-w-7xl mx-auto relative z-10 w-full">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <div className="inline-block mb-6 px-4 py-2 rounded-full text-xs uppercase tracking-widest font-bold"
-                   style={{ background: 'rgba(255, 80, 80, 0.1)', border: '1px solid rgba(255, 80, 80, 0.3)', color: '#FF5050' }}>
-                Global AI Community
-              </div>
-              <h1 className="hero-title mb-8">
-                <span className="block text-white">Where</span>
-                <span className="block gradient-text">Women Lead</span>
-                <span className="block text-white">the Future</span>
-              </h1>
-              <div className="accent-line"></div>
-              <p className="text-xl md:text-2xl mb-12 text-gray-300 leading-relaxed">
-                Join the world's first global women-led AI ecosystem. Learn, build, and lead with purpose.
-              </p>
-              <div className="flex flex-wrap gap-4">
-                <button className="btn-primary" onClick={() => scrollToSection('join')}>
-                  Join Now <ArrowRight size={20} />
-                </button>
-                <button className="btn-outline" onClick={() => scrollToSection('about')}>
-                  Our Story
-                </button>
-              </div>
-            </div>
+    /* Weekly Rhythm */
+    .rhythm-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 24px;
+      margin-top: 64px;
+    }
 
-            <div className="hidden lg:block">
-              <div className="grid grid-cols-2 gap-6">
-                {stats.map((stat, idx) => (
-                  <div key={idx} className="stat-box" style={{ animationDelay: `${idx * 0.1}s` }}>
-                    <div className="stat-number">{stat.number}</div>
-                    <div className="text-lg font-bold mt-2 mb-1">{stat.label}</div>
-                    <div className="text-sm text-gray-400">{stat.sublabel}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+    .day-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 32px 24px;
+      text-align: center;
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
 
-      {/* MISSION STATEMENT */}
-      <section className="py-32 relative" style={{ background: 'linear-gradient(180deg, #0a0a0a 0%, #000000 100%)' }}>
-        <div className="max-w-5xl mx-auto px-6 text-center">
-          <h2 className="section-title mb-12">
-            <span className="text-white">Too many voices left out.</span><br />
-            <span className="gradient-text">We're changing that.</span>
-          </h2>
-          <p className="text-xl md:text-2xl text-gray-300 leading-relaxed max-w-4xl mx-auto">
-            We're building the gold standard for ethical, inclusive AI leadership. Upskilling and empowering 
-            <strong className="text-coral"> one million women</strong> as leading Xperts in artificial intelligence.
-          </p>
-        </div>
-      </section>
+    .day-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--day-color);
+      transform: scaleX(0);
+      transition: transform 0.4s ease;
+    }
 
-      {/* BENEFITS */}
-      <section className="py-32 relative" style={{ backgroundColor: '#EDDBD5' }}>
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid lg:grid-cols-3 gap-12">
-            <div className="lg:col-span-1">
-              <h2 className="section-title text-black mb-6">
-                What Makes Us<br />
-                <span style={{ color: '#DD292F' }}>Different</span>
-              </h2>
-              <div className="accent-line" style={{ background: '#DD292F' }}></div>
-              <p className="text-lg text-gray-700 leading-relaxed mt-6">
-                AI isn't just about tools. It's about power, opportunity, and representation.
-              </p>
-            </div>
+    .day-card:hover::before {
+      transform: scaleX(1);
+    }
 
-            <div className="lg:col-span-2 space-y-8">
-              <div className="bg-white rounded-3xl p-8 border-l-4" style={{ borderColor: '#FF5050' }}>
-                <div className="flex items-start gap-6">
-                  <div className="w-14 h-14 rounded-full flex items-center justify-center flex-shrink-0"
-                       style={{ background: 'linear-gradient(135deg, #FF5050, #DD292F)' }}>
-                    <Users size={28} />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold mb-3 text-black">Community without ego</h3>
-                    <p className="text-lg text-gray-700 leading-relaxed">
-                      Connect authentically with women who lift each other up. No gatekeeping, no competition. Just growth.
-                    </p>
-                  </div>
-                </div>
-              </div>
+    .day-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--day-color);
+      transform: translateY(-6px) scale(1.02);
+    }
 
-              <div className="bg-white rounded-3xl p-8 border-l-4" style={{ borderColor: '#114E8E' }}>
-                <div className="flex items-start gap-6">
-                  <div className="w-14 h-14 rounded-full flex items-center justify-center flex-shrink-0"
-                       style={{ background: 'linear-gradient(135deg, #114E8E, #45FFCA)' }}>
-                    <BookOpen size={28} />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold mb-3 text-black">Education without gatekeeping</h3>
-                    <p className="text-lg text-gray-700 leading-relaxed">
-                      Learn at your pace with transparent, accessible resources. From basics to leadership.
-                    </p>
-                  </div>
-                </div>
-              </div>
+    .day-emoji {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
 
-              <div className="bg-white rounded-3xl p-8 border-l-4" style={{ borderColor: '#45FFCA' }}>
-                <div className="flex items-start gap-6">
-                  <div className="w-14 h-14 rounded-full flex items-center justify-center flex-shrink-0"
-                       style={{ backgroundColor: '#45FFCA', color: '#000' }}>
-                    <Heart size={28} />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold mb-3 text-black">Confidence without burnout</h3>
-                    <p className="text-lg text-gray-700 leading-relaxed">
-                      Sustainable growth through supportive, purposeful engagement. You belong here.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+    .day-label {
+      font-size: 14px;
+      font-weight: bold;
+      letter-spacing: 0.15em;
+      margin-bottom: 8px;
+    }
 
-      {/* WEEKLY RHYTHM */}
-      <section id="rhythm" className="py-32 relative" style={{ backgroundColor: '#000' }}>
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="section-title mb-6">
-              <span className="text-white">Your Weekly</span><br />
-              <span className="gradient-text">Rhythm</span>
-            </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Consistency creates habit. Each day has a clear purpose across global time zones.
-            </p>
-          </div>
+    .day-theme {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
 
-          <div className="grid md:grid-cols-5 gap-6">
-            {weeklyThemes.map((theme, idx) => (
-              <div
-                key={idx}
-                className="day-card"
-                style={{ '--day-color': theme.color }}
-              >
-                <div className="text-5xl mb-4">{theme.emoji}</div>
-                <div className="text-sm font-bold tracking-widest mb-2" style={{ color: theme.color }}>
-                  {theme.day}
-                </div>
-                <h3 className="text-lg font-bold mb-3">{theme.theme}</h3>
-                <p className="text-sm text-gray-400">{theme.purpose}</p>
-              </div>
-            ))}
-          </div>
+    .day-purpose {
+      font-size: 14px;
+      color: #999;
+    }
 
-          <div className="mt-16 text-center">
-            <button className="btn-outline">
-              Full Schedule <ChevronRight size={18} />
-            </button>
-          </div>
-        </div>
-      </section>
+    /* About */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      margin-bottom: 80px;
+    }
 
-      {/* ABOUT */}
-      <section id="about" className="py-32" style={{ background: 'linear-gradient(180deg, #000 0%, #0a0a0a 100%)' }}>
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-20 items-center mb-20">
-            <div>
-              <div className="inline-block mb-6 px-4 py-2 rounded-full text-xs uppercase tracking-widest font-bold"
-                   style={{ background: 'rgba(255, 80, 80, 0.1)', border: '1px solid rgba(255, 80, 80, 0.3)', color: '#FF5050' }}>
-                Our Story
-              </div>
-              <h2 className="section-title mb-8">
-                <span className="text-white">Ethics isn't an afterthought.</span><br />
-                <span className="gradient-text">It's our foundation</span>
-              </h2>
-              <div className="accent-line"></div>
-              <div className="space-y-6 text-lg text-gray-300 leading-relaxed mt-8">
-                <p>
-                  SHE IS AI was born from a vision to transform who leads, designs, and benefits from artificial intelligence.
-                </p>
-                <p>
-                  For too long, the people shaping technology have not reflected the people most impacted by it.
-                </p>
-                <p className="text-xl font-semibold text-white">
-                  We believe equity isn't charity. It's justice.
-                </p>
-              </div>
-            </div>
+    .about-text {
+      font-size: 18px;
+      line-height: 1.7;
+      color: #ccc;
+    }
 
-            <div className="grid grid-cols-2 gap-6">
-              <div className="glass-card">
-                <Sparkles size={32} className="text-coral mb-4" />
-                <h3 className="text-xl font-bold mb-2">Mission</h3>
-                <p className="text-gray-400">Upskill 1M women as AI Xperts</p>
-              </div>
-              <div className="glass-card">
-                <Globe size={32} className="text-mint mb-4" />
-                <h3 className="text-xl font-bold mb-2">Vision</h3>
-                <p className="text-gray-400">Women leading AI's future</p>
-              </div>
-              <div className="glass-card">
-                <Zap size={32} className="text-soft-coral mb-4" />
-                <h3 className="text-xl font-bold mb-2">Impact</h3>
-                <p className="text-gray-400">Transforming generations</p>
-              </div>
-              <div className="glass-card">
-                <Heart size={32} style={{ color: '#FF5050' }} className="mb-4" />
-                <h3 className="text-xl font-bold mb-2">Values</h3>
-                <p className="text-gray-400">Ethics, equity, empowerment</p>
-              </div>
-            </div>
-          </div>
+    .about-text p {
+      margin-bottom: 24px;
+    }
 
-          <div className="mt-20">
-            <h3 className="text-3xl font-bold text-center mb-12">Our Core Values</h3>
-            <div className="flex flex-wrap justify-center gap-4">
-              {values.map((value, idx) => (
-                <span key={idx} className="value-badge">{value}</span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+    .about-highlight {
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+    }
 
-      {/* JOIN CTA */}
-      <section id="join" className="py-40 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #DD292F 0%, #FF5050 100%)' }}>
-        <div className="absolute inset-0 opacity-20" style={{
-          backgroundImage: `radial-gradient(circle at 2px 2px, rgba(255, 255, 255, 0.4) 1px, transparent 0)`,
-          backgroundSize: '32px 32px'
-        }}></div>
-        
-        <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
-          <h2 className="hero-title mb-8">
-            Start Your<br />Journey Today
-          </h2>
-          <p className="text-2xl md:text-3xl mb-12 opacity-95">
-            You don't need to be an expert. You just need to start.
-          </p>
+    .glass-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 40px;
+      transition: all 0.4s ease;
+    }
 
-          <div className="grid md:grid-cols-3 gap-8 mb-16">
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
-              <div className="text-5xl font-black mb-4">01</div>
-              <h3 className="text-2xl font-bold mb-3">Join</h3>
-              <p className="text-lg opacity-90">$19/month for full access</p>
-            </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
-              <div className="text-5xl font-black mb-4">02</div>
-              <h3 className="text-2xl font-bold mb-3">Assess</h3>
-              <p className="text-lg opacity-90">Find your best next step</p>
-            </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
-              <div className="text-5xl font-black mb-4">03</div>
-              <h3 className="text-2xl font-bold mb-3">Lead</h3>
-              <p className="text-lg opacity-90">Choose your learning path</p>
-            </div>
-          </div>
+    .glass-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 80, 80, 0.3);
+      transform: translateY(-8px);
+    }
 
-          <button className="btn-primary" style={{ background: 'white', color: '#DD292F' }}>
-            Join SHE IS AI Community <ArrowRight size={24} />
-          </button>
-          <p className="mt-6 text-lg opacity-80">Cancel anytime • Join thousands worldwide</p>
-        </div>
-      </section>
+    .glass-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
 
-      {/* ETHICS */}
-      <section id="ethics" className="py-32" style={{ backgroundColor: '#000' }}>
-        <div className="max-w-7xl mx-auto px-6">
-          <h2 className="section-title text-center mb-20">
-            <span className="text-white">Ethics &</span>{' '}
-            <span className="gradient-text">Accessibility</span>
-          </h2>
+    .glass-card h3 {
+      font-size: 20px;
+      font-weight: bold;
+      margin: 16px 0 8px;
+    }
 
-          <div className="grid lg:grid-cols-2 gap-12">
-            <div className="glass-card">
-              <h3 className="text-3xl font-bold mb-6" style={{ color: '#FF5050' }}>Ethics First, Always</h3>
-              <p className="text-lg text-gray-300 mb-8 leading-relaxed">
-                Ethics isn't an afterthought. It's our foundation. Everything we build is rooted in unwavering principles.
-              </p>
-              <div className="grid grid-cols-2 gap-4">
-                {values.slice(0, 4).map((value, idx) => (
-                  <div key={idx} className="flex items-center gap-3 p-3 rounded-lg bg-white/5">
-                    <Check size={20} style={{ color: '#FF5050' }} />
-                    <span className="font-semibold text-sm">{value}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+    .glass-card p {
+      color: #999;
+    }
 
-            <div className="glass-card">
-              <h3 className="text-3xl font-bold mb-6" style={{ color: '#45FFCA' }}>Built for Everyone</h3>
-              <p className="text-lg text-gray-300 mb-8 leading-relaxed">
-                WCAG 2.2 AA compliant. Designed for global accessibility from day one.
-              </p>
-              <div className="space-y-4">
-                <div className="flex items-start gap-4">
-                  <Check size={24} className="flex-shrink-0 mt-1" style={{ color: '#45FFCA' }} />
-                  <span className="text-gray-300">High contrast ratios for visual clarity</span>
-                </div>
-                <div className="flex items-start gap-4">
-                  <Check size={24} className="flex-shrink-0 mt-1" style={{ color: '#45FFCA' }} />
-                  <span className="text-gray-300">Full keyboard navigation support</span>
-                </div>
-                <div className="flex items-start gap-4">
-                  <Check size={24} className="flex-shrink-0 mt-1" style={{ color: '#45FFCA' }} />
-                  <span className="text-gray-300">Screen reader optimized content</span>
-                </div>
-                <div className="flex items-start gap-4">
-                  <Check size={24} className="flex-shrink-0 mt-1" style={{ color: '#45FFCA' }} />
-                  <span className="text-gray-300">Plain language for global understanding</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+    /* Values */
+    .values-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 48px;
+    }
 
-      {/* FOOTER */}
-      <footer className="border-t border-white/10 py-16" style={{ backgroundColor: '#000' }}>
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid md:grid-cols-4 gap-12 mb-12">
-            <div>
-              <img src="/She_Logo.png" alt="SHE Community Logo" className="h-12 w-auto object-contain mb-4" />
-              <p className="text-gray-400 mb-4">Where women lead the future of AI</p>
-              <p className="text-sm text-gray-600">Part of the SHE IS AI ecosystem</p>
-            </div>
+    .value-badge {
+      background: linear-gradient(135deg, rgba(255, 80, 80, 0.2), rgba(221, 41, 47, 0.2));
+      border: 1px solid rgba(255, 80, 80, 0.3);
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: all 0.3s ease;
+    }
 
-            <div>
-              <h4 className="font-bold mb-4 text-coral uppercase tracking-wider text-sm">Navigate</h4>
-              <ul className="space-y-3">
-                <li><button onClick={() => scrollToSection('home')} className="text-gray-400 hover:text-white transition">Home</button></li>
-                <li><button onClick={() => scrollToSection('about')} className="text-gray-400 hover:text-white transition">About</button></li>
-                <li><button onClick={() => scrollToSection('rhythm')} className="text-gray-400 hover:text-white transition">Weekly Rhythm</button></li>
-                <li><button onClick={() => scrollToSection('join')} className="text-gray-400 hover:text-white transition">Join</button></li>
-              </ul>
-            </div>
+    .value-badge:hover {
+      background: linear-gradient(135deg, #FF5050, #DD292F);
+      transform: scale(1.05);
+    }
 
-            <div>
-              <h4 className="font-bold mb-4 text-coral uppercase tracking-wider text-sm">Resources</h4>
-              <ul className="space-y-3">
-                <li><button onClick={() => scrollToSection('ethics')} className="text-gray-400 hover:text-white transition">Ethics</button></li>
-                <li><a href="#accessibility" className="text-gray-400 hover:text-white transition">Accessibility</a></li>
-                <li><a href="#guidelines" className="text-gray-400 hover:text-white transition">Guidelines</a></li>
-              </ul>
-            </div>
+    /* Join CTA */
+    .cta-section {
+      padding: 160px 24px;
+      background: linear-gradient(135deg, #DD292F 0%, #FF5050 100%);
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
 
-            <div>
-              <h4 className="font-bold mb-4 text-coral uppercase tracking-wider text-sm">Connect</h4>
-              <ul className="space-y-3">
-                <li>
-                  <a href="https://sheisai.ai" target="_blank" rel="noopener noreferrer"
-                     className="text-gray-400 hover:text-white transition flex items-center gap-2">
-                    Main Website <ExternalLink size={14} />
-                  </a>
-                </li>
-                <li><a href="mailto:community@sheisai.ai" className="text-gray-400 hover:text-white transition">Contact</a></li>
-              </ul>
-            </div>
-          </div>
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0.2;
+      background-image: radial-gradient(circle at 2px 2px, rgba(255, 255, 255, 0.4) 1px, transparent 0);
+      background-size: 32px 32px;
+    }
 
-          <div className="pt-8 border-t border-white/10 text-center text-gray-600 text-sm">
-            © 2025 SHE IS AI. Built with ethics, equity, and empowerment.
-          </div>
-        </div>
-      </footer>
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin: 64px 0;
+    }
+
+    .step-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 24px;
+      padding: 32px;
+      text-align: center;
+    }
+
+    .step-number {
+      font-size: 48px;
+      font-weight: 900;
+      margin-bottom: 16px;
+    }
+
+    .step-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .step-text {
+      font-size: 18px;
+      opacity: 0.9;
+    }
+
+    /* Ethics */
+    .ethics-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+    }
+
+    .ethics-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 48px;
+    }
+
+    .ethics-title {
+      font-size: 32px;
+      font-weight: bold;
+      margin-bottom: 24px;
+    }
+
+    .ethics-text {
+      font-size: 18px;
+      line-height: 1.6;
+      color: #ccc;
+      margin-bottom: 32px;
+    }
+
+    .check-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .check-icon {
+      color: #FF5050;
+      flex-shrink: 0;
+    }
+
+    .access-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .access-item {
+      display: flex;
+      align-items: start;
+      gap: 16px;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 64px 24px;
+      background-color: #000;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+
+    .footer-logo {
+      height: 48px;
+      width: auto;
+      margin-bottom: 16px;
+    }
+
+    .footer-title {
+      font-weight: bold;
+      margin-bottom: 16px;
+      color: #FF5050;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 14px;
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-link {
+      color: #999;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-link:hover {
+      color: white;
+    }
+
+    .footer-bottom {
+      padding-top: 32px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+    }
+
+    /* Mobile Menu */
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 28px;
+      cursor: pointer;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .hero-grid, .benefits-grid, .about-grid, .glass-grid, .ethics-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .rhythm-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .rhythm-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .check-list {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <div>
+        <img src="She_Logo.png" alt="SHE Community Logo" class="logo">
+      </div>
+      <div class="nav-links">
+        <a href="#home" class="nav-link">Home</a>
+        <a href="#about" class="nav-link">About</a>
+        <a href="#rhythm" class="nav-link">Rhythm</a>
+        <a href="#join" class="nav-link">Join</a>
+        <a href="#ethics" class="nav-link">Ethics</a>
+        <a href="https://sheisai.ai" target="_blank" class="nav-link" style="color: #45FFCA;">Main Site ↗</a>
+      </div>
+      <button class="mobile-menu-btn">☰</button>
     </div>
-  );
-};
+  </nav>
 
-export default SHECommunityWebsite;
+  <!-- Hero Section -->
+  <section id="home" class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div>
+          <div class="badge">Global AI Community</div>
+          <h1 class="hero-title">
+            <span>Where</span><br>
+            <span class="gradient-text">Women Lead</span><br>
+            <span>the Future</span>
+          </h1>
+          <div class="accent-line"></div>
+          <p class="hero-text">
+            Join the world's first global women-led AI ecosystem. Learn, build, and lead with purpose.
+          </p>
+          <a href="#join" class="btn-primary">Join Now →</a>
+          <a href="#about" class="btn-outline">Our Story</a>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div class="stat-number">1M</div>
+            <div class="stat-label">Women Xperts</div>
+            <div class="stat-sublabel">Our Mission</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number">5</div>
+            <div class="stat-label">Days/Week</div>
+            <div class="stat-sublabel">Active Community</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number">$19</div>
+            <div class="stat-label">Per Month</div>
+            <div class="stat-sublabel">Cancel Anytime</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number">∞</div>
+            <div class="stat-label">Impact</div>
+            <div class="stat-sublabel">Generations</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mission Statement -->
+  <section class="section section-dark">
+    <div class="container">
+      <h2 class="section-title">
+        <span>Too many voices left out.</span><br>
+        <span class="gradient-text">We're changing that.</span>
+      </h2>
+      <p class="section-text">
+        We're building the gold standard for ethical, inclusive AI leadership. Upskilling and empowering 
+        <strong style="color: #FF5050;"> one million women</strong> as leading Xperts in artificial intelligence.
+      </p>
+    </div>
+  </section>
+
+  <!-- Benefits -->
+  <section class="section section-beige">
+    <div class="container">
+      <div class="benefits-grid">
+        <div>
+          <h2 class="section-title" style="text-align: left; margin-bottom: 24px;">
+            What Makes Us<br>
+            <span style="color: #DD292F;">Different</span>
+          </h2>
+          <div class="accent-line" style="background: #DD292F;"></div>
+          <p style="font-size: 18px; line-height: 1.6; color: #555; margin-top: 24px;">
+            AI isn't just about tools. It's about power, opportunity, and representation.
+          </p>
+        </div>
+        <div>
+          <div class="benefit-card" style="border-color: #FF5050;">
+            <div class="benefit-icon" style="background: linear-gradient(135deg, #FF5050, #DD292F);">👥</div>
+            <div>
+              <h3 class="benefit-title">Community without ego</h3>
+              <p class="benefit-text">Connect authentically with women who lift each other up. No gatekeeping, no competition. Just growth.</p>
+            </div>
+          </div>
+          <div class="benefit-card" style="border-color: #114E8E;">
+            <div class="benefit-icon" style="background: linear-gradient(135deg, #114E8E, #45FFCA);">📚</div>
+            <div>
+              <h3 class="benefit-title">Education without gatekeeping</h3>
+              <p class="benefit-text">Learn at your pace with transparent, accessible resources. From basics to leadership.</p>
+            </div>
+          </div>
+          <div class="benefit-card" style="border-color: #45FFCA;">
+            <div class="benefit-icon" style="background: #45FFCA; color: #000;">❤️</div>
+            <div>
+              <h3 class="benefit-title">Confidence without burnout</h3>
+              <p class="benefit-text">Sustainable growth through supportive, purposeful engagement. You belong here.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Weekly Rhythm -->
+  <section id="rhythm" class="section" style="background-color: #000;">
+    <div class="container">
+      <h2 class="section-title">
+        <span>Your Weekly</span><br>
+        <span class="gradient-text">Rhythm</span>
+      </h2>
+      <p class="section-text" style="margin-bottom: 0;">
+        Consistency creates habit. Each day has a clear purpose across global time zones.
+      </p>
+      <div class="rhythm-grid">
+        <div class="day-card" style="--day-color: #FF5050;">
+          <div class="day-emoji">🌟</div>
+          <div class="day-label" style="color: #FF5050;">MON</div>
+          <div class="day-theme">Momentum Monday</div>
+          <div class="day-purpose">Set your focus</div>
+        </div>
+        <div class="day-card" style="--day-color: #114E8E;">
+          <div class="day-emoji">💬</div>
+          <div class="day-label" style="color: #114E8E;">TUE</div>
+          <div class="day-theme">Ambassadors' Office</div>
+          <div class="day-purpose">Get support</div>
+        </div>
+        <div class="day-card" style="--day-color: #45FFCA;">
+          <div class="day-emoji">🤝</div>
+          <div class="day-label" style="color: #45FFCA;">WED</div>
+          <div class="day-theme">Networking</div>
+          <div class="day-purpose">Connect & collaborate</div>
+        </div>
+        <div class="day-card" style="--day-color: #FF8585;">
+          <div class="day-emoji">🧩</div>
+          <div class="day-label" style="color: #FF8585;">THU</div>
+          <div class="day-theme">Issues Room</div>
+          <div class="day-purpose">Solve together</div>
+        </div>
+        <div class="day-card" style="--day-color: #DD292F;">
+          <div class="day-emoji">🌊</div>
+          <div class="day-label" style="color: #DD292F;">FRI</div>
+          <div class="day-theme">Flow Friday</div>
+          <div class="day-purpose">Celebrate wins</div>
+        </div>
+      </div>
+      <div style="text-align: center; margin-top: 64px;">
+        <a href="#rhythm" class="btn-outline">Full Schedule →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="section section-dark">
+    <div class="container">
+      <div class="about-grid">
+        <div>
+          <div class="badge">Our Story</div>
+          <h2 class="section-title" style="text-align: left; margin-bottom: 32px;">
+            <span>Ethics isn't an afterthought.</span><br>
+            <span class="gradient-text">It's our foundation</span>
+          </h2>
+          <div class="accent-line"></div>
+          <div class="about-text">
+            <p>SHE IS AI was born from a vision to transform who leads, designs, and benefits from artificial intelligence.</p>
+            <p>For too long, the people shaping technology have not reflected the people most impacted by it.</p>
+            <p class="about-highlight">We believe equity isn't charity. It's justice.</p>
+          </div>
+        </div>
+        <div class="glass-grid">
+          <div class="glass-card">
+            <div style="font-size: 32px; color: #FF5050;">✨</div>
+            <h3>Mission</h3>
+            <p>Upskill 1M women as AI Xperts</p>
+          </div>
+          <div class="glass-card">
+            <div style="font-size: 32px; color: #45FFCA;">🌍</div>
+            <h3>Vision</h3>
+            <p>Women leading AI's future</p>
+          </div>
+          <div class="glass-card">
+            <div style="font-size: 32px; color: #FF8585;">⚡</div>
+            <h3>Impact</h3>
+            <p>Transforming generations</p>
+          </div>
+          <div class="glass-card">
+            <div style="font-size: 32px; color: #FF5050;">❤️</div>
+            <h3>Values</h3>
+            <p>Ethics, equity, empowerment</p>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top: 80px;">
+        <h3 style="font-size: 32px; font-weight: bold; text-align: center; margin-bottom: 48px;">Our Core Values</h3>
+        <div class="values-container">
+          <span class="value-badge">Ethics</span>
+          <span class="value-badge">Equity</span>
+          <span class="value-badge">Inclusion</span>
+          <span class="value-badge">Empowerment</span>
+          <span class="value-badge">Creative Innovation</span>
+          <span class="value-badge">Sustainability</span>
+          <span class="value-badge">Transparency</span>
+          <span class="value-badge">Accountability</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Join CTA -->
+  <section id="join" class="cta-section">
+    <div class="container" style="position: relative; z-index: 10;">
+      <h2 class="hero-title" style="margin-bottom: 32px;">
+        Start Your<br>Journey Today
+      </h2>
+      <p style="font-size: clamp(1.5rem, 3vw, 2rem); margin-bottom: 48px; opacity: 0.95;">
+        You don't need to be an expert. You just need to start.
+      </p>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number">01</div>
+          <h3 class="step-title">Join</h3>
+          <p class="step-text">$19/month for full access</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">02</div>
+          <h3 class="step-title">Assess</h3>
+          <p class="step-text">Find your best next step</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">03</div>
+          <h3 class="step-title">Lead</h3>
+          <p class="step-text">Choose your learning path</p>
+        </div>
+      </div>
+      <a href="#join" class="btn-primary" style="background: white; color: #DD292F;">Join SHE IS AI Community →</a>
+      <p style="margin-top: 24px; font-size: 18px; opacity: 0.8;">Cancel anytime • Join thousands worldwide</p>
+    </div>
+  </section>
+
+  <!-- Ethics -->
+  <section id="ethics" class="section" style="background-color: #000;">
+    <div class="container">
+      <h2 class="section-title">
+        <span>Ethics &</span> <span class="gradient-text">Accessibility</span>
+      </h2>
+      <div class="ethics-grid">
+        <div class="ethics-card">
+          <h3 class="ethics-title" style="color: #FF5050;">Ethics First, Always</h3>
+          <p class="ethics-text">
+            Ethics isn't an afterthought. It's our foundation. Everything we build is rooted in unwavering principles.
+          </p>
+          <div class="check-list">
+            <div class="check-item">
+              <span class="check-icon">✓</span>
+              <span style="font-weight: 600; font-size: 14px;">Ethics</span>
+            </div>
+            <div class="check-item">
+              <span class="check-icon">✓</span>
+              <span style="font-weight: 600; font-size: 14px;">Equity</span>
+            </div>
+            <div class="check-item">
+              <span class="check-icon">✓</span>
+              <span style="font-weight: 600; font-size: 14px;">Inclusion</span>
+            </div>
+            <div class="check-item">
+              <span class="check-icon">✓</span>
+              <span style="font-weight: 600; font-size: 14px;">Empowerment</span>
+            </div>
+          </div>
+        </div>
+        <div class="ethics-card">
+          <h3 class="ethics-title" style="color: #45FFCA;">Built for Everyone</h3>
+          <p class="ethics-text">
+            WCAG 2.2 AA compliant. Designed for global accessibility from day one.
+          </p>
+          <div class="access-list">
+            <div class="access-item">
+              <span style="color: #45FFCA; flex-shrink: 0; font-size: 24px;">✓</span>
+              <span style="color: #ccc;">High contrast ratios for visual clarity</span>
+            </div>
+            <div class="access-item">
+              <span style="color: #45FFCA; flex-shrink: 0; font-size: 24px;">✓</span>
+              <span style="color: #ccc;">Full keyboard navigation support</span>
+            </div>
+            <div class="access-item">
+              <span style="color: #45FFCA; flex-shrink: 0; font-size: 24px;">✓</span>
+              <span style="color: #ccc;">Screen reader optimized content</span>
+            </div>
+            <div class="access-item">
+              <span style="color: #45FFCA; flex-shrink: 0; font-size: 24px;">✓</span>
+              <span style="color: #ccc;">Plain language for global understanding</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <img src="She_Logo.png" alt="SHE Community Logo" class="footer-logo">
+          <p style="color: #999; margin-bottom: 16px;">Where women lead the future of AI</p>
+          <p style="font-size: 14px; color: #666;">Part of the SHE IS AI ecosystem</p>
+        </div>
+        <div>
+          <h4 class="footer-title">Navigate</h4>
+          <ul class="footer-links">
+            <li><a href="#home" class="footer-link">Home</a></li>
+            <li><a href="#about" class="footer-link">About</a></li>
+            <li><a href="#rhythm" class="footer-link">Weekly Rhythm</a></li>
+            <li><a href="#join" class="footer-link">Join</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">Resources</h4>
+          <ul class="footer-links">
+            <li><a href="#ethics" class="footer-link">Ethics</a></li>
+            <li><a href="#" class="footer-link">Accessibility</a></li>
+            <li><a href="#" class="footer-link">Guidelines</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">Connect</h4>
+          <ul class="footer-links">
+            <li><a href="https://sheisai.ai" target="_blank" class="footer-link">Main Website ↗</a></li>
+            <li><a href="mailto:community@sheisai.ai" class="footer-link">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        © 2025 SHE IS AI. Built with ethics, equity, and empowerment.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
